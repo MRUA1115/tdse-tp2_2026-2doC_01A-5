@@ -24,9 +24,20 @@ arquitectura completa de tareas ya funcional:
   midiendo NOE (número de ejecuciones), LET (tiempo de la última ejecución),
   BCET y WCET (mejor/peor caso de tiempo de ejecución) por tarea.
 
+## Análisis de código fuente (Gemini)
+
+Se generaron los siguientes archivos con el análisis pedido por la guía:
+
+| Archivo | Contenido |
+| :--- | :--- |
+| `tdse-tp2_00.md` | Respuesta genérica sobre el enfoque del TP (Paso 07) |
+| `tdse-tp2_00-main.md` | Análisis de `main.c`, `stm32f1xx_it.c`, `startup_stm32f103rbtx.s` (Paso 09) |
+| `tdse-tp2_00-app.md` | Análisis de `app.c`, `app_it.c`, `logger.c/h`, `systick.c`, `dwt.h` (Paso 12) |
+| `tdse-tp2_00-sensor.md` | Análisis de `task_sensor_attribute.h`, `task_sensor.c` (Paso 15) |
+| `tdse-tp2_00-system.md` | Análisis de System + interfaces (Paso ~18) |
+| `tdse-tp2_00-actuator.md` | Análisis de Actuator + interfaces (Paso 20) |
+
 ## Pendiente
 - Compilar y depurar el proyecto en STM32CubeIDE con la placa conectada.
-- Consultar a Gemini el análisis del código fuente de `app.c`, `task_sensor.c`,
-  `task_system.c` y `task_actuator.c`, y almacenar la respuesta en un archivo
-  `gemini_00.txt` dentro de esta carpeta (paso pedido por la guía, requiere
-  interacción manual con la herramienta).
+- Confirmar mediante depuración real los valores de `task_dta_list[index]`
+  (NOE, LET, BCET, WCET) mencionados en `tdse-tp2_00-app.md`.
