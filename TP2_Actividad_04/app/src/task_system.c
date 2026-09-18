@@ -158,7 +158,11 @@ void task_system_normal_statechart(void)
 			if ((true == p_task_system_dta->flag) && (EV_SYS_ACTIVE == p_task_system_dta->event))
 			{
 				p_task_system_dta->flag = false;
-				put_event_task_actuator(EV_LED_ACTIVE, ID_LED_A);
+				/* TP2 - Actividad 04 - Actuator Statechart (task_actuator.jpg)
+				 * El foco de esta actividad es el LED (ST_LED_OFF/ON/BLINK);
+				 * el System solo excita EV_LED_ON mientras el boton este
+				 * presionado (evento generico EV_SYS_ACTIVE del Sensor). */
+				put_event_task_actuator(EV_LED_ON, ID_LED_A);
 				p_task_system_dta->state = ST_SYS_ACTIVE;
 			}
 
@@ -169,7 +173,7 @@ void task_system_normal_statechart(void)
 			if ((true == p_task_system_dta->flag) && (EV_SYS_IDLE == p_task_system_dta->event))
 			{
 				p_task_system_dta->flag = false;
-				put_event_task_actuator(EV_LED_IDLE, ID_LED_A);
+				put_event_task_actuator(EV_LED_OFF, ID_LED_A);
 				p_task_system_dta->state = ST_SYS_IDLE;
 			}
 

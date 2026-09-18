@@ -49,9 +49,11 @@ extern "C" {
 typedef enum task_sensor_ev {EV_BTN_UP,
 							 EV_BTN_DOWN} task_sensor_ev_t;
 
-/* States of Task Sensor */
-typedef enum task_sensor_st {ST_BTN_IDLE,
-							 ST_BTN_ACTIVE} task_sensor_st_t;
+/* States of Task Sensor (Sensor Statechart - task_sensor.jpg) */
+typedef enum task_sensor_st {ST_BTN_UP,
+							 ST_BTN_FALLING,
+							 ST_BTN_DOWN,
+							 ST_BTN_RISING} task_sensor_st_t;
 
 /* Identifier of Task Sensor */
 typedef enum task_sensor_id {ID_BTN_A, ID_BTN_B, ID_BTN_C} task_sensor_id_t;
@@ -63,7 +65,6 @@ typedef struct
 	uint16_t			pin;
 	GPIO_PinState		pressed;
 	uint32_t			tick_max;
-	task_system_ev_t	signal_up;
 	task_system_ev_t	signal_down;
 } task_sensor_cfg_t;
 

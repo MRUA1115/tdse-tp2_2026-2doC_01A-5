@@ -45,13 +45,21 @@ extern "C" {
 /********************** macros ***********************************************/
 
 /********************** typedef **********************************************/
-/* Events to excite Task System */
-typedef enum task_system_ev {EV_SYS_IDLE,
-							 EV_SYS_ACTIVE} task_system_ev_t;
+/* Events to excite Task System (System Statechart - task_system.jpg)
+ * Intelligent Parking Management System:
+ *   EV_SYS_CAMERA      : la camara detecta la llegada de un auto.
+ *   EV_SYS_BUTTON      : el usuario presiona el boton de apertura.
+ *   EV_SYS_SENSOR_COIL : el sensor de bobina detecta que el auto ya paso. */
+typedef enum task_system_ev {EV_SYS_CAMERA,
+							 EV_SYS_BUTTON,
+							 EV_SYS_SENSOR_COIL} task_system_ev_t;
 
-/* State of Task System */
-typedef enum task_system_st {ST_SYS_IDLE,
-							 ST_SYS_ACTIVE} task_system_st_t;
+/* State of Task System (5 estados - task_system.jpg) */
+typedef enum task_system_st {ST_SYS_WAIT_FOR_CAR_ARRIEVE,
+							 ST_SYS_WAIT_FOR_BUTTON_PRESSED,
+							 ST_SYS_WAIT_FOR_BARRIER_OPENED,
+							 ST_SYS_WAIT_FOR_CAR_LEAVES,
+							 ST_SYS_WAIT_FOR_BARRIER_CLOSED} task_system_st_t;
 
 typedef struct
 {

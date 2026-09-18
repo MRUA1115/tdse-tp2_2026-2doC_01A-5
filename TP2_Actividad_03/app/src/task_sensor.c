@@ -56,17 +56,16 @@
 #define SENSOR_DTA_QTY		SENSOR_CFG_QTY
 
 /********************** internal data declaration ****************************/
-/* TP2 - Actividad 02 - 3 Sensor Statechart
- * Los 3 sensores excitan el mismo Task System (1 solo sistema, sin
- * distincion de que boton lo activo), reutilizando los mismos eventos
- * genericos EV_SYS_IDLE / EV_SYS_ACTIVE que en la Actividad 01. */
+/* TP2 - Actividad 03 - 3 Sensor Statechart alimentando el System real
+ * (Intelligent Parking Management System - task_system.jpg):
+ *   BTN_A -> EV_SYS_CAMERA      (camara detecta llegada del auto)
+ *   BTN_B -> EV_SYS_BUTTON      (usuario presiona el boton)
+ *   BTN_C -> EV_SYS_SENSOR_COIL (sensor de bobina detecta el paso del auto)
+ * Solo interesa el flanco de bajada (DOWN) de cada boton. */
 const task_sensor_cfg_t task_sensor_cfg_list[] = {
-	{ID_BTN_A,  BTN_A_PORT,  BTN_A_PIN,  BTN_A_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_ACTIVE},
-	{ID_BTN_B,  BTN_B_PORT,  BTN_B_PIN,  BTN_B_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_ACTIVE},
-	{ID_BTN_C,  BTN_C_PORT,  BTN_C_PIN,  BTN_C_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_ACTIVE}
+	{ID_BTN_A,  BTN_A_PORT,  BTN_A_PIN,  BTN_A_PRESSED, DEL_BTN_MAX, EV_SYS_CAMERA},
+	{ID_BTN_B,  BTN_B_PORT,  BTN_B_PIN,  BTN_B_PRESSED, DEL_BTN_MAX, EV_SYS_BUTTON},
+	{ID_BTN_C,  BTN_C_PORT,  BTN_C_PIN,  BTN_C_PRESSED, DEL_BTN_MAX, EV_SYS_SENSOR_COIL}
 };
 
 task_sensor_dta_t task_sensor_dta_list[SENSOR_DTA_QTY];
@@ -102,11 +101,13 @@ void task_sensor_init(void *parameters)
 		p_task_sensor_dta = &task_sensor_dta_list[index];
 
 		/* Init & Print out: Index & Task execution FSM */
-		state = ST_BTN_IDLE;
+		state = ST_BTN_UP;
 		p_task_sensor_dta->state = state;
 
 		event = EV_BTN_UP;
 		p_task_sensor_dta->event = event;
+
+		p_task_sensor_dta->tick = DEL_BTN_MIN;
 
 		LOGGER_INFO(" ");
 		LOGGER_INFO("   %s = %lu   %s = %lu   %s = %lu",
@@ -147,22 +148,57 @@ void task_sensor_statechart(uint32_t index)
 
 	switch (p_task_sensor_dta->state)
 	{
-		case ST_BTN_IDLE:
+		case ST_BTN_UP:
 
 			if (EV_BTN_DOWN == p_task_sensor_dta->event)
 			{
-				put_event_task_system(p_task_sensor_cfg->signal_down);
-				p_task_sensor_dta->state = ST_BTN_ACTIVE;
+				p_task_sensor_dta->tick  = p_task_sensor_cfg->tick_max;
+				p_task_sensor_dta->state = ST_BTN_FALLING;
 			}
 
 			break;
 
-		case ST_BTN_ACTIVE:
+		case ST_BTN_FALLING:
 
 			if (EV_BTN_UP == p_task_sensor_dta->event)
 			{
-				put_event_task_system(p_task_sensor_cfg->signal_up);
-				p_task_sensor_dta->state = ST_BTN_IDLE;
+				p_task_sensor_dta->state = ST_BTN_UP;
+			}
+			else if ((EV_BTN_DOWN == p_task_sensor_dta->event) && (0 == p_task_sensor_dta->tick))
+			{
+				put_event_task_system(p_task_sensor_cfg->signal_down);
+				p_task_sensor_dta->state = ST_BTN_DOWN;
+			}
+			else if ((EV_BTN_DOWN == p_task_sensor_dta->event) && (0 < p_task_sensor_dta->tick))
+			{
+				p_task_sensor_dta->tick--;
+			}
+
+			break;
+
+		case ST_BTN_DOWN:
+
+			if (EV_BTN_UP == p_task_sensor_dta->event)
+			{
+				p_task_sensor_dta->tick  = p_task_sensor_cfg->tick_max;
+				p_task_sensor_dta->state = ST_BTN_RISING;
+			}
+
+			break;
+
+		case ST_BTN_RISING:
+
+			if (EV_BTN_DOWN == p_task_sensor_dta->event)
+			{
+				p_task_sensor_dta->state = ST_BTN_DOWN;
+			}
+			else if ((EV_BTN_UP == p_task_sensor_dta->event) && (0 == p_task_sensor_dta->tick))
+			{
+				p_task_sensor_dta->state = ST_BTN_UP;
+			}
+			else if ((EV_BTN_UP == p_task_sensor_dta->event) && (0 < p_task_sensor_dta->tick))
+			{
+				p_task_sensor_dta->tick--;
 			}
 
 			break;
@@ -170,7 +206,7 @@ void task_sensor_statechart(uint32_t index)
 		default:
 
 			p_task_sensor_dta->tick  = DEL_BTN_MIN;
-			p_task_sensor_dta->state = ST_BTN_IDLE;
+			p_task_sensor_dta->state = ST_BTN_UP;
 			p_task_sensor_dta->event = EV_BTN_UP;
 
 			break;

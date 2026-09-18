@@ -159,8 +159,8 @@ void task_system_normal_statechart(void)
 			{
 				p_task_system_dta->flag = false;
 				/* TP2 - Actividad 05 - 2 Actuator Statechart: notificar a ambos LEDs */
-				put_event_task_actuator(EV_LED_ACTIVE, ID_LED_A);
-				put_event_task_actuator(EV_LED_ACTIVE, ID_LED_B);
+				put_event_task_actuator(EV_LED_ON, ID_LED_A);
+				put_event_task_actuator(EV_LED_ON, ID_LED_B);
 				p_task_system_dta->state = ST_SYS_ACTIVE;
 			}
 
@@ -171,8 +171,8 @@ void task_system_normal_statechart(void)
 			if ((true == p_task_system_dta->flag) && (EV_SYS_IDLE == p_task_system_dta->event))
 			{
 				p_task_system_dta->flag = false;
-				put_event_task_actuator(EV_LED_IDLE, ID_LED_A);
-				put_event_task_actuator(EV_LED_IDLE, ID_LED_B);
+				put_event_task_actuator(EV_LED_OFF, ID_LED_A);
+				put_event_task_actuator(EV_LED_OFF, ID_LED_B);
 				p_task_system_dta->state = ST_SYS_IDLE;
 			}
 

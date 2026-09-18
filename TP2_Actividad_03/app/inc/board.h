@@ -99,6 +99,16 @@ extern "C" {
 #define LED_ON			LED_A_ON
 #define LED_OFF			LED_A_OFF
 
+/* TP2 - Actividad 03 - System Statechart (Intelligent Parking Management)
+ * El System ya requiere 2 identificadores logicos de Actuator (barrera
+ * abierta/cerrada). En esta actividad ambos se mapean sobre el unico LED
+ * disponible (LD2) solo para poder compilar/depurar el System de forma
+ * aislada; la Actividad 05 agrega los 2 LEDs fisicos reales (D0..D15). */
+#define LED_B_PIN		LD2_Pin
+#define LED_B_PORT		LD2_GPIO_Port
+#define LED_B_ON		GPIO_PIN_SET
+#define LED_B_OFF		GPIO_PIN_RESET
+
 #endif
 
 /* STM32 Nucleo Boards - 144 Pins */

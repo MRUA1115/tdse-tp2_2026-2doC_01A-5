@@ -45,13 +45,15 @@ extern "C" {
 /********************** macros ***********************************************/
 
 /********************** typedef **********************************************/
-/* Events to excite Task Actuator */
-typedef enum task_actuator_ev {EV_LED_IDLE,
-							   EV_LED_ACTIVE} task_actuator_ev_t;
+/* Events to excite Task Actuator (Actuator Statechart - task_actuator.jpg) */
+typedef enum task_actuator_ev {EV_LED_OFF,
+							   EV_LED_ON,
+							   EV_LED_BLINK} task_actuator_ev_t;
 
-/* States of Task Actuator */
-typedef enum task_actuator_st {ST_LED_IDLE,
-							   ST_LED_ACTIVE} task_actuator_st_t;
+/* States of Task Actuator (3 estados - task_actuator.jpg) */
+typedef enum task_actuator_st {ST_LED_OFF,
+							   ST_LED_ON,
+							   ST_LED_BLINK} task_actuator_st_t;
 
 /* Identifier of Task Actuator */
 typedef enum task_actuator_id {ID_LED_A} task_actuator_id_t;
