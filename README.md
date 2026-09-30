@@ -4,4 +4,4 @@
 ### Responsable de la entrega:
 | Padrón | Apellidos, Nombres | Fecha | Deadline |
 | :----- | :--------------------- | :------: | :-------: |
-| 112119 | YYYY, ZZZ | | Semana 06 |
+| 112119 | Rúa, Martino |30/09/2026| Semana 08 |
