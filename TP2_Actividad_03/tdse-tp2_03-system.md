@@ -1,4 +1,4 @@
-# Archivo de Depuración: tdse-tp2_04-xxxxx.md
+# Archivo de Depuración: tdse-tp2_03-system.md
 
 **Confirmación de funcionamiento de la máquina de estados del Sistema tras ejecuciones de `app_update()`**
 
